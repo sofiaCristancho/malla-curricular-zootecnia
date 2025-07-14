@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Malla Zootecnia Interactiva</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3e5f5;
+      margin: 0;
+      padding: 20px;
+      overflow-x: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #6a1b9a;
+    }
+    .progreso-container {
+      max-width: 800px;
+      margin: 10px auto;
+      background: #f8bbd0;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .progreso-barra {
+      background: #b3e5fc;
+      height: 20px;
+      width: 0%;
+      transition: width 0.5s;
+    }
+    .malla {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 20px 0;
+    }
+    .semestre {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      min-width: 250px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-top: 6px solid #ec407a;
+    }
+    .semestre h2 {
+      text-align: center;
+      color: #d81b60;
+    }
+    .materia {
+      background-color: #f8bbd0;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: 0.3s;
+    }
+    .materia:hover {
+      background-color: #f48fb1;
+    }
+    .materia.checked {
+      background-color: #b3e5fc !important;
+      color: #01579b;
+      text-decoration: line-through;
+    }
+    .materia.locked {
+      background-color: #e1bee7;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .materia .titulo {
+      font-weight: bold;
+    }
+    .materia small {
+      display: block;
+      font-size: 12px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular - Zootecnia UdeA</h1>
+  <div class="progreso-container">
+    <div class="progreso-barra" id="barra"></div>
+  </div>
+  <div class="malla">
+    <!-- Aquí van los bloques de los 10 semestres -->
+    <!-- NOTA: para este ejemplo simplificado, asumimos que los bloques ya están pegados aquí. -->
+    <!-- En tu entorno local, debes copiar los bloques generados en las respuestas anteriores aquí. -->
+  </div>
+  <script>
+    function toggle(el) {
+      if (el.classList.contains("locked")) return;
+      el.classList.toggle("checked");
+      actualizarBloqueos();
+      actualizarCreditos();
+    }
+    function actualizarBloqueos() {
+      document.querySelectorAll('.materia[data-prereq]').forEach(materia => {
+        const prereq = materia.dataset.prereq;
+        const requisito = document.querySelector(`[data-id="${prereq}"]`);
+        const aprobado = requisito && requisito.classList.contains("checked");
+        materia.classList.toggle("locked", !aprobado);
+      });
+    }
+    function actualizarCreditos() {
+      const materias = document.querySelectorAll('.materia.checked');
+      let total = 0;
+      materias.forEach(mat => total += parseInt(mat.dataset.creditos || 0));
+      const barra = document.getElementById("barra");
+      barra.style.width = `${(total / 181) * 100}%`;
+    }
+    actualizarBloqueos();
+    actualizarCreditos();
+  </script>
+</body>
+</html>
